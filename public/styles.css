@@ -1,0 +1,205 @@
+/* ===========
+   Mobile-first UI para escáner de precios
+   Optimizada para celulares y tablets
+   =========== */
+
+:root {
+  --radius: 16px;
+  --gap: 12px;
+  --bg: #f7f7f8;
+  --card: #ffffff;
+  --text: #0c1116;
+  --muted: #6b7280;
+  --primary: #111827;
+  --border: #e5e7eb;
+  --shadow: 0 8px 28px rgba(0,0,0,.06);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0b0f13;
+    --card: #0f141b;
+    --text: #e5e7eb;
+    --muted: #9aa3af;
+    --primary: #e5e7eb;
+    --border: #1f2937;
+    --shadow: 0 10px 28px rgba(0,0,0,.35);
+  }
+}
+
+/* Tipografía fluida y ajustes táctiles */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  font-size: clamp(15px, 1.6vw, 16px);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Layout básico */
+header {
+  position: sticky; top: 0;
+  z-index: 10;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--gap);
+  padding: calc(12px + env(safe-area-inset-top, 0)) 16px 12px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+}
+header h1 { margin: 0; font-size: 1.05rem; font-weight: 700; letter-spacing: .2px; }
+main { padding: 14px; padding-bottom: calc(16px + env(safe-area-inset-bottom, 0)); max-width: 860px; margin: 0 auto; }
+
+/* Panel contenedor */
+.panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  box-shadow: var(--shadow);
+}
+
+/* Fila de controles */
+.row {
+  display: flex; align-items: center; gap: var(--gap); flex-wrap: wrap;
+}
+
+button, select, input {
+  font: inherit;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  padding: 12px 14px;
+  min-height: 44px;               /* tamaño táctil recomendado */
+}
+
+button {
+  cursor: pointer;
+  transition: transform .05s ease, opacity .15s ease, background .15s ease;
+}
+button:active { transform: translateY(1px); }
+button.primary {
+  background: var(--primary);
+  color: #000000;
+  border-color: var(--primary);
+}
+button.ghost { background: rgba(127,127,127,.06); }
+
+input::placeholder { color: var(--muted); }
+input, select { min-width: 200px; }
+
+/* Estado de conexión y mensajes */
+.muted { color: var(--muted); font-size: .92rem; }
+.status { margin-top: 8px; min-height: 22px; font-weight: 600; }
+.status.ok  { color: #0ea05d; }
+.status.err { color: #d14343; }
+
+/* Cámara */
+#videoWrap {
+  position: relative;
+  margin-top: 10px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #000;
+  border: 1px solid var(--border);
+}
+#reader {
+  width: 100%;
+  /* Altura móvil/tablet: mostrás más contenido abajo */
+  height: 52vh;          /* podés bajar a 48vh si querés aún más compacto */
+  max-height: 420px;
+}
+#scanOverlay {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  border: 2px dashed rgba(255,255,255,.55);
+  border-radius: var(--radius);
+}
+/* Línea de escaneo suave */
+#scanOverlay::before {
+  content: "";
+  position: absolute; left: 6%; right: 6%; height: 2px; top: 15%;
+  background: rgba(0,255,180,.85);
+  box-shadow: 0 0 18px rgba(0,255,200,.7);
+  border-radius: 2px;
+  animation: scan 2.4s linear infinite;
+}
+@keyframes scan {
+  0% { top: 15%; opacity: .9; }
+  50% { top: 85%; opacity: .75; }
+  100% { top: 15%; opacity: .9; }
+}
+
+/* Tarjeta de resultado */
+.card {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 14px;
+  margin-top: 14px;
+  padding: 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  animation: pop .18s ease-out;
+}
+.card img {
+  width: 110px; height: 110px; object-fit: cover;
+  border-radius: 12px; background: #f3f3f3;
+}
+.name  { font-size: 1.05rem; font-weight: 800; line-height: 1.25; }
+.sku   { color: var(--muted); font-size: .9rem; }
+.price { font-size: clamp(1.6rem, 4.8vw, 2rem); font-weight: 900; margin-top: 6px; letter-spacing: .2px; }
+
+@keyframes pop { from { transform: scale(.985); opacity:.0; } to { transform: scale(1); opacity:1; } }
+
+/* Tips/banners */
+.hint { font-size: .9rem; color: var(--muted); margin-top: 10px; }
+.banner {
+  background: #fff3cd; color: #856404; border: 1px solid #ffe08a;
+  padding: 10px; border-radius: 10px; margin-top: 10px;
+}
+.hidden { display: none; }
+
+/* Pie */
+.footer {
+  text-align: center;
+  color: var(--muted);
+  padding: 18px 14px calc(18px + env(safe-area-inset-bottom, 0));
+  font-size: .9rem;
+}
+
+/* Accesibilidad y states */
+:focus-visible { outline: 2px solid #22c55e; outline-offset: 2px; }
+button[disabled] { opacity: .6; cursor: not-allowed; }
+
+/* Ajustes responsivos */
+@media (min-width: 480px) {
+  .card { grid-template-columns: 120px 1fr; }
+  .card img { width: 120px; height: 120px; }
+}
+@media (max-width: 380px) {
+  .row { gap: 8px; }
+  input, select { min-width: 140px; }
+  .card { grid-template-columns: 1fr; }
+  .card img { width: 100%; height: 180px; }
+}
+
+/* Modo oscuro: mejor visibilidad del overlay */
+@media (prefers-color-scheme: dark) {
+  #scanOverlay { border-color: rgba(255,255,255,.35); }
+  #scanOverlay::before { background: rgba(0,255,200,.9); box-shadow: 0 0 14px rgba(0,255,200,.65); }
+}
+
+/* Reduce motion si el usuario lo pidió */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}

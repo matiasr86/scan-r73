@@ -1,0 +1,8 @@
+docker build -t matiasr86/scan-r73:latest .
+
+docker login
+docker push matiasr86/scan-r73:latest
+
+
+
+docker run -d --name scan-r73 --env-file .env -p 6600:3000 matiasr86/scan-r73:latest

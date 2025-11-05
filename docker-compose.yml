@@ -1,0 +1,9 @@
+version: "3.9"
+services:
+  app:
+    image: matiasr86/scan-r73:latest
+    container_name: scan-r73
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "6600:3000"   # host:container

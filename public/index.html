@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Escáner de Precios</title>
+  <link rel="stylesheet" href="styles.css?v=ui1" />
+  <meta name="theme-color" content="#ffffff" />
+  <style>
+    /* util mínimo */
+    .hidden { display: none !important; }
+    .price-old { text-decoration: line-through; opacity: .6; }
+    .price-promo { font-weight: 800; }
+    .paygrid { margin-top: 8px; font-size: .95rem; }
+    .paygrid .row { display:flex; justify-content:space-between; padding:6px 0; border-top:1px solid var(--border); }
+    .paygrid .row:first-child { border-top:0 }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Escanear artículo</h1>
+    <div class="muted" id="ping">Conectando…</div>
+  </header>
+
+  <main>
+    <section class="panel">
+      <div class="row">
+        <select id="cameraSelect" title="Seleccionar cámara"></select>
+        <button id="toggleScan" class="primary">Iniciar escaneo</button>
+        <label class="row">
+          <input id="iva" type="checkbox" checked />
+          <span class="muted">IVA incluido</span>
+        </label>
+      </div>
+
+      <!-- Cámara: arrancamos OCULTA; solo se muestra cuando el usuario toca "Iniciar escaneo" -->
+      <div id="videoWrap" class="hidden" aria-label="Visor de cámara">
+        <div id="reader" style="width:100%; height:52vh; max-height:420px;"></div>
+        <div id="scanOverlay"></div>
+      </div>
+
+      <p class="hint">Podés escribir o escanear con lector USB; presioná Enter:</p>
+      <div class="row">
+        <input id="manual" inputmode="numeric" placeholder="Ingresar código de barras" autofocus />
+        <button id="buscar" class="ghost">Buscar</button>
+      </div>
+
+      <div id="status" class="status muted"></div>
+      <div id="inappWarning" class="banner hidden">
+        Estás en un navegador embebido (WhatsApp/Instagram). Tocá “⋯” → <b>Abrir en Safari/Chrome</b> para usar la cámara.
+      </div>
+    </section>
+
+    <div id="result"></div>
+  </main>
+
+  <footer class="footer">En la Estación: usá lector USB. En móvil: tocá “Iniciar escaneo”.</footer>
+
+  <script src="/vendor/quagga.min.js"></script>
+  <script src="config.js"></script>
+  <script src="app.js?v=kiosk-pay" defer></script>
+</body>
+</html>
